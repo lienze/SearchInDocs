@@ -1,5 +1,5 @@
 # SearchInDocs
 
-### Ê¹ÓÃpython2.7.9±àÐ´µÄËÑË÷¹¤¾ß  
+### ä½¿ç”¨python2.7.9ç¼–å†™çš„æœç´¢å·¥å…· 
 *A tool wrote by python 2.7.9*  
 
