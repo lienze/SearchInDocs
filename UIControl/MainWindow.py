@@ -47,6 +47,26 @@ class Ui_MainWindow(QtGui.QMainWindow):
         else:
             event.ignore()
 
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return:
+            # 点击回车按键开始进行文档的搜索
+            if self.comboBox.currentText():
+                self.word = ExecWord.ExecWord(self.comboBox.currentText())
+                if self.comboBox_2.currentText():
+                    self.word.Exec(self.comboBox_2.currentText())
+                else:
+                    # 提示输入搜索内容
+                    QtGui.QMessageBox.question(self,
+                                               u'提示',
+                                               u'请输入目录',
+                                               QtGui.QMessageBox.Ok)
+            else:
+                # 提示输入搜索内容
+                QtGui.QMessageBox.question(self,
+                                           u'提示',
+                                           u'请输入搜索内容',
+                                           QtGui.QMessageBox.Ok)
+
     @QtCore.pyqtSlot()
     def OpenDirectory(self):
         options = QtGui.QFileDialog.DontResolveSymlinks | QtGui.QFileDialog.ShowDirsOnly
@@ -74,10 +94,6 @@ class Ui_MainWindow(QtGui.QMainWindow):
         item.setText(0, u'这个地方放地址')
         parameterItem = QtGui.QTreeWidgetItem(item)
         parameterItem.setText(0, "Parameter")
-
-        self.word = ExecWord.ExecWord('C:\\testDocs')
-        self.word.Exec('hello')
-        # self.word.findString('hello')
 
 
     # 以下是通过Qt Designer自动生成的代码
