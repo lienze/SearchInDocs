@@ -55,7 +55,13 @@ class Ui_MainWindow(QtGui.QMainWindow):
                 self.word = ExecWord.ExecWord(str(self.comboBox_2.currentText()))
                 self.word.delegate = self
                 if self.comboBox.currentText():
-                    self.word.Exec(str(self.comboBox.currentText()))
+                    currentTextTmp = self.comboBox.currentText()
+                    # currentTextTmp = currentTextTmp.encode('gbk')
+                    # currentTextTmp = currentTextTmp.decode('utf-8')
+                    # currentTextTmp = currentTextTmp.decode('utf-8')
+                    # print currentTextTmp
+                    currentTextTmp = unicode(currentTextTmp.toUtf8(), 'utf-8', 'ignore')
+                    self.word.Exec(currentTextTmp)
                 else:
                     # 提示输入搜索内容
                     QtGui.QMessageBox.question(self,
@@ -76,22 +82,27 @@ class Ui_MainWindow(QtGui.QMainWindow):
                                                            "QFileDialog.getExistingDirectory()",
                                                            self.comboBox_2.currentText(), options)
         if directory:
-            self.comboBox_2.setText(directory)
+            print directory
+            # self.comboBox_2.setText(directory)
+            self.comboBox_2.insertItem(0, directory)
+            self.comboBox_2.setCurrentIndex(0)
 
     def slotOpen(self, item):
         if item and item.parent():
             itemPath = item.parent().text(0) + '\\' + item.text(0)
             # print itemPath
             if self.word:
-                self.word.openWordFile(str(itemPath))
+                if type(itemPath).__name__ == 'QString':
+                    itemPath = unicode(itemPath.toUtf8(), 'utf-8', 'ignore')
+                self.word.openWordFile(itemPath)
         else:
             print 'error'
 
     def aftersetupUi(self):
         # 手动补充设置
         # comboBox设置(暂时),计划要改成读取配置文件的
-        self.comboBox.addItem('Hell')
-        self.comboBox_2.addItem('E:\\testDocs')
+        self.comboBox.addItem(u'商标')
+        self.comboBox_2.addItem(r'E:\GitHub\TestDocs')
         # button2按钮映射处理
         self.connect(self.pushButton_2,
                      QtCore.SIGNAL('clicked()'),

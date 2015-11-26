@@ -38,23 +38,29 @@ class ExecWord:
                     if not (fnmatch.fnmatch(filename, '*.docx') or fnmatch.fnmatch(filename, '*.doc')):
                         continue
                     doc = os.path.abspath(os.path.join(path, filename))
+                    # print 'processing %s...' % doc
+                    if type(doc).__name__ == 'str':
+                        doc = doc.decode('GBK')
                     # 状态栏显示相应进度
                     self.delegate.statusBar().showMessage(doc)
-                    print 'processing %s...' % doc
+                    # print doc
                     self.word.Documents.Open(doc)
                     # docastext = doc[:-4] + 'txt'
                     # self.word.ActiveDocument.SaveAs(docastext, FileFormat=constants.wdFormatText)
-
+                    # print findstr
                     if self.findString(findstr):
-                        # print u'找到了'
+                        print u'找到了'
                         if self.bFirstFindStr:
                             item = QtGui.QTreeWidgetItem(self.delegate.treeWidget)
                             item.setText(0, path)
                             self.bFirstFindStr = False
                         parameterItem = QtGui.QTreeWidgetItem(item)
-                        parameterItem.setText(0, filename)
+                        if type(filename).__name__ == 'str':
+                            filenameshow = filename.decode('gbk')
+                        parameterItem.setText(0, filenameshow)
                     self.word.ActiveDocument.Close()
         finally:
             # self.word.Quit()
+            self.delegate.statusBar().showMessage(u'搜索完毕')
             print 'end'
 
