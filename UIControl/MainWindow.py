@@ -50,21 +50,22 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return:
             # 点击回车按键开始进行文档的搜索
-            if self.comboBox.currentText():
-                self.word = ExecWord.ExecWord(self.comboBox.currentText())
-                if self.comboBox_2.currentText():
-                    self.word.Exec(self.comboBox_2.currentText())
+            if self.comboBox_2.currentText():
+                self.word = ExecWord.ExecWord(str(self.comboBox_2.currentText()))
+                self.word.delegate = self
+                if self.comboBox.currentText():
+                    self.word.Exec(str(self.comboBox.currentText()))
                 else:
                     # 提示输入搜索内容
                     QtGui.QMessageBox.question(self,
                                                u'提示',
-                                               u'请输入目录',
+                                               u'请输入搜索内容',
                                                QtGui.QMessageBox.Ok)
             else:
                 # 提示输入搜索内容
                 QtGui.QMessageBox.question(self,
                                            u'提示',
-                                           u'请输入搜索内容',
+                                           u'请输入目录',
                                            QtGui.QMessageBox.Ok)
 
     @QtCore.pyqtSlot()
@@ -87,6 +88,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
                      self,
                      QtCore.SLOT('OpenDirectory()'))
 
+        '''
         # 清理treeWidget
         self.treeWidget.clear()
         # 接下来开始初始化treeWidget的各项数据
@@ -94,6 +96,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
         item.setText(0, u'这个地方放地址')
         parameterItem = QtGui.QTreeWidgetItem(item)
         parameterItem.setText(0, "Parameter")
+        '''
 
 
     # 以下是通过Qt Designer自动生成的代码
