@@ -8,6 +8,7 @@
 
 from PyQt4 import QtCore, QtGui
 from WordTools import ExecWord
+from ConfigTools import ConfigINI
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -72,16 +73,25 @@ class Ui_MainWindow(QtGui.QMainWindow):
     def OpenDirectory(self):
         options = QtGui.QFileDialog.DontResolveSymlinks | QtGui.QFileDialog.ShowDirsOnly
         directory = QtGui.QFileDialog.getExistingDirectory(self,
-                "QFileDialog.getExistingDirectory()",
-                self.comboBox_2.currentText(), options)
+                                                           "QFileDialog.getExistingDirectory()",
+                                                           self.comboBox_2.currentText(), options)
         if directory:
             self.comboBox_2.setText(directory)
 
+    def slotOpen(self, item):
+        if item and item.parent():
+            itemPath = item.parent().text(0) + '\\' + item.text(0)
+            # print itemPath
+            if self.word:
+                self.word.openWordFile(str(itemPath))
+        else:
+            print 'error'
+
     def aftersetupUi(self):
         # 手动补充设置
-        # comboBox设置(暂时)
-        self.comboBox.addItem('abc')
-        self.comboBox_2.addItem('C:\\testDocs')
+        # comboBox设置(暂时),计划要改成读取配置文件的
+        self.comboBox.addItem('Hell')
+        self.comboBox_2.addItem('E:\\testDocs')
         # button2按钮映射处理
         self.connect(self.pushButton_2,
                      QtCore.SIGNAL('clicked()'),
@@ -97,6 +107,25 @@ class Ui_MainWindow(QtGui.QMainWindow):
         parameterItem = QtGui.QTreeWidgetItem(item)
         parameterItem.setText(0, "Parameter")
         '''
+        '''self.connect(self.treeWidget,
+                     QtCore.SIGNAL('itemClicked(QTreeWidgetItem*,int)'),
+                     self,
+                     QtCore.SLOT(self.slotOpen))'''
+        self.treeWidget.itemDoubleClicked.connect(self.slotOpen)
+
+        # 初始化配置文件的读取
+        self.configini = ConfigINI.ConfigINI()
+        if self.configini:
+            i = 0
+            for _ in self.configini.search_word_list:
+                if _:
+                    self.comboBox.insertItem(i, _)
+                    i += 1
+            i = 0
+            for _ in self.configini.search_dir_list:
+                if _:
+                    self.comboBox_2.insertItem(i, _)
+                    i += 1
 
 
     # 以下是通过Qt Designer自动生成的代码
