@@ -61,6 +61,8 @@ class Ui_MainWindow(QtGui.QMainWindow):
                     # currentTextTmp = currentTextTmp.decode('utf-8')
                     # print currentTextTmp
                     currentTextTmp = unicode(currentTextTmp.toUtf8(), 'utf-8', 'ignore')
+                    self.configini.search_dir_list.append(str(self.comboBox_2.currentText()))
+                    self.configini.search_word_list.append(currentTextTmp)
                     self.word.Exec(currentTextTmp)
                 else:
                     # 提示输入搜索内容

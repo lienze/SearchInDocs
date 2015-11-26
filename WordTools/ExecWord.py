@@ -22,7 +22,7 @@ class ExecWord:
         return boo_res
 
     def openWordFile(self, wordPath=None):
-        print wordPath
+        # print wordPath
         self.word = Dispatch('word.application')
         self.word.Visible = 1
         self.word.Documents.Open(wordPath)
@@ -49,7 +49,7 @@ class ExecWord:
                     # self.word.ActiveDocument.SaveAs(docastext, FileFormat=constants.wdFormatText)
                     # print findstr
                     if self.findString(findstr):
-                        print u'找到了'
+                        # print u'找到了'
                         if self.bFirstFindStr:
                             item = QtGui.QTreeWidgetItem(self.delegate.treeWidget)
                             item.setText(0, path)
@@ -62,5 +62,7 @@ class ExecWord:
         finally:
             # self.word.Quit()
             self.delegate.statusBar().showMessage(u'搜索完毕')
-            print 'end'
+            # 更新搜索记录
+            self.delegate.configini.RecordHistoryList()
+            print u'搜索完毕'
 

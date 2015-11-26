@@ -2,8 +2,10 @@ __author__ = 'lienze'
 # coding=utf-8
 import ConfigParser
 
+RECORD_HISTORY_NUM = 5  # 历史记录数量
 
 class ConfigINI:
+
     def __init__(self):
         # 读取配置文件ini
         self.conf = ConfigParser.ConfigParser()
@@ -20,20 +22,20 @@ class ConfigINI:
                 # 看是否存在该Section，不存在则创建
                 if not self.conf.has_section("combox1"):
                     self.conf.add_section("combox1")
-                    for _ in xrange(1, 6):
+                    for _ in xrange(1, RECORD_HISTORY_NUM+1):
                         self.conf.set("combox1", "item"+str(_), "")
                 if not self.conf.has_section("combox2"):
                     self.conf.add_section("combox2")
-                    for _ in xrange(1, 6):
+                    for _ in xrange(1, RECORD_HISTORY_NUM+1):
                         self.conf.set("combox2", "item"+str(_), "")
                 self.conf.write(open('config.ini', "w+"))
             else:
-                for num in xrange(1, 5 + 1):
-                    # print num
+                for num in xrange(1, RECORD_HISTORY_NUM + 1):
                     # 首先读取搜索记录
                     try:
                         item_tmp1 = self.conf.get("combox1", "item" + str(num))
-                        self.search_word_list.append(item_tmp1)
+                        if item_tmp1:
+                            self.search_word_list.append(item_tmp1)
                     except ConfigParser.NoSectionError:
                         print 'NoSectionError'
                     except ConfigParser.NoOptionError:
@@ -43,14 +45,32 @@ class ConfigINI:
                     # 接着读取搜索目录记录
                     try:
                         item_tmp2 = self.conf.get("combox2", "item" + str(num))
-                        self.search_dir_list.append(item_tmp2)
+                        if item_tmp2:
+                            self.search_dir_list.append(item_tmp2)
                     except ConfigParser.NoSectionError:
                         print 'NoSectionError'
                     except ConfigParser.NoOptionError:
                         print 'NoOptionError'
                     # print item_tmp2
 
-
-    def RecordHistoryList(self, comb1, comb2):
+    def RecordHistoryList(self):
         # 将历史搜索记录，写入配置文件config.ini
-        pass
+        print 'start to record'
+        for _ in xrange(0, RECORD_HISTORY_NUM):
+            print _, len(self.search_word_list)
+            print _, len(self.search_dir_list)
+            if _ < len(self.search_word_list):
+                # 记录到配置文件中
+                print self.search_word_list[_]
+                if type(self.search_word_list[_]).__name__ == 'unicode':
+                    self.conf.set("combox1", "item"+str(5), self.search_word_list[_].encode('utf-8'))
+                else:
+                    self.conf.set("combox1", "item"+str(5), self.search_word_list[_])
+            if _ < len(self.search_dir_list):
+                self.search_dir_list[_]
+                if type(self.search_dir_list[_]).__name__ == 'unicode':
+                    self.conf.set("combox2", "item"+str(5), self.search_dir_list[_].encode('utf-8'))
+                else:
+                    self.conf.set("combox2", "item"+str(5), self.search_dir_list[_])
+        self.conf.read("config.ini")
+        self.conf.write(open('config.ini', "w+"))
