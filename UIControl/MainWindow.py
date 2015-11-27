@@ -129,17 +129,16 @@ class Ui_MainWindow(QtGui.QMainWindow):
         # 初始化配置文件的读取
         self.configini = ConfigINI.ConfigINI()
         if self.configini:
-            i = 0
             for _ in self.configini.search_word_list:
                 if _:
-                    self.comboBox.insertItem(i, _)
-                    i += 1
-            i = 0
+                    if type(_).__name__ == 'str':
+                        _ = _.decode('utf-8')
+                    self.comboBox.addItem(_)
             for _ in self.configini.search_dir_list:
                 if _:
-                    self.comboBox_2.insertItem(i, _)
-                    i += 1
-
+                    if type(_).__name__ == 'str':
+                        _ = _.decode('utf-8')
+                    self.comboBox_2.addItem(_)
 
     # 以下是通过Qt Designer自动生成的代码
     def setupUi(self, MainWindow):
