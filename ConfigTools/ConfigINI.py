@@ -4,6 +4,7 @@ import ConfigParser
 
 RECORD_HISTORY_NUM = 5  # 历史记录数量
 
+
 class ConfigINI:
 
     def __init__(self):
@@ -59,18 +60,13 @@ class ConfigINI:
         conf = ConfigParser.ConfigParser()
         conf.read("config.ini")
         for _ in xrange(0, RECORD_HISTORY_NUM):
-            # print _, len(self.search_word_list)
-            # print _, len(self.search_dir_list)
             if _ < len(self.search_word_list):
                 # 记录到配置文件中
-                # print self.search_word_list[_]
                 if type(self.search_word_list[_]).__name__ == 'unicode':
-                    print self.search_word_list[_]
                     conf.set("combox1", "item"+str(_+1), self.search_word_list[_].encode('utf-8'))
                 else:
                     conf.set("combox1", "item"+str(_+1), self.search_word_list[_])
             if _ < len(self.search_dir_list):
-                print self.search_dir_list[_]
                 if type(self.search_dir_list[_]).__name__ == 'unicode':
                     conf.set("combox2", "item"+str(_+1), self.search_dir_list[_].encode('utf-8'))
                 else:
