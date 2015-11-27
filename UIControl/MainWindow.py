@@ -48,6 +48,12 @@ class Ui_MainWindow(QtGui.QMainWindow):
         else:
             event.ignore()
 
+    def OnAbout(self):
+        QtGui.QMessageBox.information(self,
+                                      u'关于',
+                                      u'作者保留所有权利\nVersion:0.0.1\nCompiled@2015.11.27\nEmail:lienze2010@126.com',
+                                      QtGui.QMessageBox.Ok)
+
     def keyPressEvent(self, e):
         if e.key() == QtCore.Qt.Key_Enter or e.key() == QtCore.Qt.Key_Return:
             # 点击回车按键开始进行文档的搜索
@@ -213,7 +219,7 @@ class Ui_MainWindow(QtGui.QMainWindow):
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.actionQuit, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.close)
-        QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.close)
+        QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("triggered()")), MainWindow.OnAbout)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
